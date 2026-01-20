@@ -143,6 +143,9 @@ Que la 3 contenía la nueva información que mandé con POST.
 
 **Perfil de Trailhead**: https://www.salesforce.com/trailblazer/puoyd4s5h7q7ut4f5b
 
+
+![POST](assets/img/Badge.png)
+
 ---
 
 ## Ejercicio 5 - Objetos de Salesforce
@@ -362,3 +365,54 @@ Es un sistema para gestionar procesos internos como finanzas, inventarios y recu
 #### N. ¿Salesforce es un ERP?
 
 No, Salesforce es un CRM, aunque puede integrarse con ERPs como SAP u Oracle.
+
+---
+
+## Ejercicio 7 - Desarrollo en Salesforce
+
+Realizar las siguientes actividades sobre el Playground 1 del ejercicio 4:
+
+### A. Consultar tu ID haciendo un GET con POSTMAN
+
+**URL**: `https://procontacto-reclutamiento-default-rtdb.firebaseio.com/contacts.json`
+
+Se realizó una petición GET utilizando POSTMAN para consultar el ID.
+
+![POST](assets/img/7.A.png)
+
+### B. Agregar un campo al objeto Contact
+
+Se agregó un campo personalizado al objeto Contact con las siguientes características:
+
+- **Nombre del campo**: `idprocontacto`
+- **Tipo**: Texto
+- **Longitud**: 255 caracteres
+
+![POST](assets/img/7.B.png)
+
+Este campo permitirá almacenar el identificador externo que se utilizará para sincronizar datos con el servicio web.
+
+### C. Desarrollo de un desencadenador (Trigger)
+
+Se desarrolló una solución completa que incluye:
+
+#### Funcionalidad implementada
+
+Al modificar o crear un contacto en Salesforce completando el campo `idprocontacto`, se invoca automáticamente el servicio web para obtener y actualizar los datos del contacto.
+
+#### Componentes desarrollados
+
+1. **Servicio HTTP en Apex**: Se implementó un servicio capaz de realizar peticiones HTTP externas. Este componente se encarga de:
+   - Consultar el servicio web de Firebase
+   - Interpretar la respuesta en formato JSON
+   - Extraer la información necesaria (correo electrónico)
+   
+   [![clase]](/ContactCalloutService.apxc)
+
+2. **Trigger (Disparador)**: Se desarrolló un disparador que monitorea la creación y edición de registros de Contact. Sus funciones principales son:
+   - Detectar cuándo se asigna un identificador externo (`idprocontacto`)
+   - Disparar automáticamente el proceso de actualización sin intervención del usuario
+   
+    [![Trigger]](/ContactTrigger.apxt)
+
+3. **Procesamiento asíncrono**: Para garantizar una buena experiencia de usuario y cumplir con los límites de Salesforce, la comunicación con el servidor externo se configuró para ejecutarse en segundo plano, evitando así bloqueos en la interfaz principal.
