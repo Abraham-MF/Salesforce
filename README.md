@@ -113,6 +113,8 @@ Una vez se realizó el request se recibió la siguiente información en formato 
 }
 ```
 
+![GET](assets/img/3.1.png)
+
 ### 2. Realizar un request POST a la URL anterior
 
 **Body**:
@@ -125,7 +127,11 @@ Una vez se realizó el request se recibió la siguiente información en formato 
 
 Una vez realizado devuelve un ID único autogenerado.
 
+![POST](assets/img/3.2.png)
+
 ### 3. Realizar nuevamente un request GET a la URL
+
+![GET](assets/img/3.3.png)
 
 **¿Qué diferencias se observan entre las llamadas el punto 1 y 3?**
 
@@ -135,7 +141,7 @@ Que la 3 contenía la nueva información que mandé con POST.
 
 ## Ejercicio 4
 
-**Perfil de Trailhead**: sdfsdfsdfs
+**Perfil de Trailhead**: https://www.salesforce.com/trailblazer/puoyd4s5h7q7ut4f5b
 
 ---
 
@@ -202,6 +208,8 @@ Una incidencia, queja o solicitud de servicio técnico.
 Documentos de ayuda, FAQs o manuales para resolver problemas.
 
 **Almacena**: Título, resumen, cuerpo del artículo y versión.
+
+[![Diagrama de ER](assets/img/ER.png)](assets/ER-Saleforce.drawio)
 
 ---
 
