@@ -1,0 +1,40 @@
+public class ContactCalloutService {
+    
+    @future(callout=true)
+    public static void updateContactEmail(Set<Id> contactIds) {
+        List<Contact> contactsToUpdate = new List<Contact>();
+        
+        List<Contact> contactList = [SELECT Id, idprocontacto__c FROM Contact WHERE Id IN :contactIds];
+        
+        for (Contact c : contactList) {
+            if (String.isNotBlank(c.idprocontacto__c)) {
+                Http http = new Http();
+                HttpRequest request = new HttpRequest();
+                
+                String endpoint = 'https://procontacto-reclutamiento-default-rtdb.firebaseio.com/contacts/' + c.idprocontacto__c + '.json';
+                
+                request.setEndpoint(endpoint);
+                request.setMethod('GET');
+                
+                try {
+                    HttpResponse response = http.send(request);
+                    
+                    if (response.getStatusCode() == 200) {
+                        Map<String, Object> results = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
+                        
+                        if (results != null && results.containsKey('email')) {
+                            c.Email = (String) results.get('email');
+                            contactsToUpdate.add(c);
+                        }
+                    }
+                } catch (Exception e) {
+                    System.debug('Error en el callout: ' + e.getMessage());
+                }
+            }
+        }
+        
+        if (!contactsToUpdate.isEmpty()) {
+            update contactsToUpdate;
+        }
+    }
+}

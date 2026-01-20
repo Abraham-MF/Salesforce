@@ -1,0 +1,17 @@
+trigger ContactTrigger on Contact (after insert, after update) {
+    Set<Id> idsToProcess = new Set<Id>();
+
+    for (Contact con : Trigger.new) {
+        if (con.idprocontacto__c != null) {
+            if (Trigger.isInsert) {
+                idsToProcess.add(con.Id);
+            } else if (Trigger.isUpdate && con.idprocontacto__c != Trigger.oldMap.get(con.Id).idprocontacto__c) {
+                idsToProcess.add(con.Id);
+            }
+        }
+    }
+
+    if (!idsToProcess.isEmpty()) {
+        ContactCalloutService.updateContactEmail(idsToProcess);
+    }
+}
